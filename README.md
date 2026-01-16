@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo/wiredi-banner-dark.svg" alt="WireDI" width="600">
+  <img src="logo/logo.png" alt="WireDI" width="600">
 </p>
 
 <p align="center">
