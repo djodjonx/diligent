@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.9](https://github.com/djodjonx/diligent/compare/v0.0.8...v0.0.9) (2026-01-16)
+
+
+### Bug Fixes
+
+* **config:** remove examples/index.ts and exclude examples from type-check ([9c6afb4](https://github.com/djodjonx/diligent/commit/9c6afb4e5654826efe950611a839b86294acd9f7))
+* **types:** resolve BuilderConfigEntryValue generic type error ([a39904f](https://github.com/djodjonx/diligent/commit/a39904f3d7efe1247e73bf70ef0754ff8df49786))
+
 ### [0.0.8](https://github.com/djodjonx/diligent/compare/v0.0.7...v0.0.8) (2026-01-16)
 
 
