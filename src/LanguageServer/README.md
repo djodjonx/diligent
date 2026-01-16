@@ -17,9 +17,9 @@ Plugin TypeScript Language Service pour valider les injections de dépendances a
 ### Via npm (recommandé)
 
 ```bash
-npm install @djodjonx/diligent
+npm install @djodjonx/wiredi
 # ou
-pnpm add @djodjonx/diligent
+pnpm add @djodjonx/wiredi
 ```
 
 ### Configuration TypeScript
@@ -31,7 +31,7 @@ Ajoutez le plugin dans votre `tsconfig.json` :
   "compilerOptions": {
     "plugins": [
       {
-        "name": "@djodjonx/diligent/plugin",
+        "name": "@djodjonx/wiredi/plugin",
         "verbose": true
       }
     ]
@@ -208,7 +208,7 @@ src/LanguageServer/plugin/
    ```json
    {
      "compilerOptions": {
-       "plugins": [{ "name": "@djodjonx/diligent/plugin" }]
+       "plugins": [{ "name": "@djodjonx/wiredi/plugin" }]
      }
    }
    ```
@@ -225,17 +225,17 @@ src/LanguageServer/plugin/
 
 2. **Activez le mode verbose** pour voir les logs :
    ```json
-   { "name": "@djodjonx/diligent/plugin", "verbose": true }
+   { "name": "@djodjonx/wiredi/plugin", "verbose": true }
    ```
    - VS Code : Ouvrez "Output" → "TypeScript" pour voir les logs
    - IntelliJ : Regardez les logs dans "Help" → "Diagnostic Tools" → "Debug Log Settings"
 
-### Erreur "Cannot find module '@djodjonx/diligent/plugin'"
+### Erreur "Cannot find module '@djodjonx/wiredi/plugin'"
 
-Assurez-vous que `@djodjonx/diligent` est installé :
+Assurez-vous que `@djodjonx/wiredi` est installé :
 ```bash
-npm install @djodjonx/diligent
+npm install @djodjonx/wiredi
 # ou
-pnpm add @djodjonx/diligent
+pnpm add @djodjonx/wiredi
 ```
 

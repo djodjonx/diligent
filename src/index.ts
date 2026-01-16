@@ -209,7 +209,7 @@ function registerEvent(
     // Check if event dispatcher provider is configured
     if (!hasEventDispatcherProvider()) {
         // Silently skip if no event dispatcher is configured
-        // This allows using diligent without events
+        // This allows using WireDI without events
         return
     }
 
@@ -285,8 +285,10 @@ type ValidateInjections<LocalInjections, InheritedTokenUnion> =
                 ? T extends InheritedTokenUnion
                     ? {
                         // eslint-disable-next-line max-len
-                        error: 'Token collision detected. This token is already declared in an extended partial. Each token must be unique.'
+                        error: '[WireDI] This token is already registered in a partial. Remove it from here or from the partial to avoid conflicts.'
                         token: T
+                        // eslint-disable-next-line max-len
+                        hint: 'Each token can only be registered once across all partials and the main config.'
                     }
                     : LocalInjections[K] // ✅ Valid New Entry
                 : LocalInjections[K]
@@ -303,7 +305,12 @@ type ValidateListeners<LocalListeners, InheritedListenerUnion> =
         : {
             [K in keyof LocalListeners]: LocalListeners[K] extends { event: infer E, listener: infer L }
                 ? { event: E, listener: L } extends InheritedListenerUnion
-                    ? { error: 'Duplicate listener detected from partials.', event: E, listener: L }
+                    ? {
+                        error: '[WireDI] This event listener is already registered in a partial'
+                        event: E
+                        listener: L
+                        hint: 'Each (event, listener) pair can only be registered once.'
+                    }
                     : LocalListeners[K]
                 : LocalListeners[K]
         }
@@ -436,11 +443,11 @@ export function defineBuilderConfig<
  * @example
  * ```typescript
  * // main.ts - Entry point
- * import { useContainerProvider, TsyringeProvider } from '@djodjonx/diligent'
+ * import { useContainerProvider, TsyringeProvider } from '@djodjonx/wiredi'
  * useContainerProvider(new TsyringeProvider())
  *
  * // anywhere.ts
- * import { useBuilder } from '@djodjonx/diligent'
+ * import { useBuilder } from '@djodjonx/wiredi'
  * const { resolve } = useBuilder(myConfig)
  * const service = resolve(MyService)
  * ```

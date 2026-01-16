@@ -1,6 +1,6 @@
 # ts-di-validator-plugin
 
-Plugin TypeScript Language Service pour la validation statique des dépendances d'injection avec `@djodjonx/diligent` et `tsyringe`.
+Plugin TypeScript Language Service pour la validation statique des dépendances d'injection avec `@djodjonx/wiredi` et `tsyringe`.
 
 ## Fonctionnalités
 
@@ -63,7 +63,7 @@ Le plugin analyse automatiquement les fichiers contenant `defineBuilderConfig` o
 
 ```typescript
 import { injectable, inject } from 'tsyringe'
-import { defineBuilderConfig, definePartialConfig } from '@djodjonx/diligent'
+import { defineBuilderConfig, definePartialConfig } from '@djodjonx/wiredi'
 
 // Token
 const TOKENS = {

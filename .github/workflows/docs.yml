@@ -37,11 +37,46 @@ jobs:
         with:
           version: 10
 
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build library
+        run: pnpm build:lib
+
       - name: Generate documentation
         run: pnpm docs
+
+      - name: Add .nojekyll file
+        run: touch docs/api/.nojekyll
+
+      - name: Create index redirect
+        run: |
+          cat > docs/api/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="refresh" content="0; url=./modules.html">
+            <title>WireDI Documentation</title>
+          </head>
+          <body>
+            <p>Redirecting to <a href="./modules.html">documentation</a>...</p>
+          </body>
+          </html>
+          EOF
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

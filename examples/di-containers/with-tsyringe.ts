@@ -1,5 +1,5 @@
 /**
- * Example: Using diligent with tsyringe
+ * Example: Using WireDI with tsyringe
  *
  * tsyringe is a lightweight dependency injection container for TypeScript/JavaScript.
  * It uses decorators (@injectable, @inject) for dependency registration.
@@ -16,8 +16,8 @@ import {
     useEventDispatcherProvider,
     MutableEventDispatcherProvider,
     defineBuilderConfig,
-} from '@djodjonx/diligent'
-import useBuilder from '@djodjonx/diligent'
+} from '@djodjonx/wiredi'
+import useBuilder from '@djodjonx/wiredi'
 
 // ============================================================
 // 1. DEFINE YOUR SERVICES

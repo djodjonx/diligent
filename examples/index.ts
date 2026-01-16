@@ -1,5 +1,5 @@
 /**
- * diligent Examples Index
+ * WireDI Examples Index
  *
  * This file provides exports and re-exports for all example implementations.
  * Use this as a quick reference or import examples directly in your tests.
@@ -8,7 +8,7 @@
  */
 
 // ============================================================
-// DI Container Providers (Built-in to diligent)
+// DI Container Providers (Built-in to WireDI)
 // ============================================================
 
 /**
@@ -85,12 +85,12 @@ export type {
 /**
  * @example Import specific provider
  * ```typescript
- * import { RxJsEventDispatcherProvider } from 'diligent/examples'
+ * import { RxJsEventDispatcherProvider } from 'WireDI/examples'
  * ```
  *
  * @example Import all examples
  * ```typescript
- * import * as Examples from 'diligent/examples'
+ * import * as Examples from 'WireDI/examples'
  * ```
  */
 

@@ -43,7 +43,7 @@ let globalEventDispatcherProvider: EventDispatcherProvider | null = null
  *     useEventDispatcherProvider,
  *     MutableEventDispatcherProvider,
  *     getContainerProvider
- * } from '@djodjonx/diligent'
+ * } from '@djodjonx/wiredi'
  *
  * // 1. Setup DI container first
  * useContainerProvider(new TsyringeProvider({ container, Lifecycle }))

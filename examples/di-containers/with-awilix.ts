@@ -1,5 +1,5 @@
 /**
- * Example: Using diligent with Awilix
+ * Example: Using WireDI with Awilix
  *
  * Awilix is a powerful dependency injection container for Node.js.
  * It supports multiple injection modes: PROXY, CLASSIC, and RESOLUTION.
@@ -15,8 +15,8 @@ import {
     MutableEventDispatcherProvider,
     defineBuilderConfig,
     AwilixProvider,
-} from '@djodjonx/diligent'
-import useBuilder from '@djodjonx/diligent'
+} from '@djodjonx/wiredi'
+import useBuilder from '@djodjonx/wiredi'
 
 // ============================================================
 // 1. DEFINE YOUR SERVICES

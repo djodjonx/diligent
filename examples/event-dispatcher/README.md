@@ -131,7 +131,7 @@ No external dependencies required
 
 ```typescript
 import { RxJsEventDispatcherProvider } from './examples/event-dispatcher/RxJsEventDispatcherProvider'
-import { useEventDispatcherProvider, getContainerProvider } from '@djodjonx/diligent'
+import { useEventDispatcherProvider, getContainerProvider } from '@djodjonx/wiredi'
 ```
 
 ### 2. Create and Register
@@ -158,7 +158,7 @@ class SendWelcomeEmailListener {
     }
 }
 
-// Configure with diligent
+// Configure with WireDI
 const config = defineBuilderConfig({
     builderId: 'app',
     injections: [
@@ -175,7 +175,7 @@ const config = defineBuilderConfig({
 Implement the `EventDispatcherProvider` interface:
 
 ```typescript
-import type { EventDispatcherProvider } from '@djodjonx/diligent'
+import type { EventDispatcherProvider } from '@djodjonx/wiredi'
 
 class MyCustomEventDispatcher implements EventDispatcherProvider {
     readonly name = 'my-custom-dispatcher'

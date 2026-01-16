@@ -1,6 +1,6 @@
-# diligent - Examples
+# WireDI - Examples
 
-This directory contains comprehensive examples showing how to integrate different systems with `@djodjonx/diligent`.
+This directory contains comprehensive examples showing how to integrate different systems with `@djodjonx/wiredi`.
 
 ## 📁 Directory Structure
 
@@ -68,7 +68,7 @@ pnpm add rxjs                         # For RxJS example
 
 ### DI Container Providers (Built-in)
 
-These providers are **included in diligent**:
+These providers are **included in WireDI**:
 
 | Provider | Package Required | Status | Complexity |
 |----------|-----------------|--------|------------|
@@ -78,7 +78,7 @@ These providers are **included in diligent**:
 
 **Usage:**
 ```typescript
-import { TsyringeProvider } from '@djodjonx/diligent'
+import { TsyringeProvider } from '@djodjonx/wiredi'
 useContainerProvider(new TsyringeProvider({ container, Lifecycle }))
 ```
 
@@ -103,7 +103,7 @@ useEventDispatcherProvider(new RxJsEventDispatcherProvider({ containerProvider }
 ### For Beginners
 
 1. Start with [tsyringe example](./di-containers/with-tsyringe.ts) (simplest)
-2. Understand the [builder pattern](./di-containers/README.md#configuration-with-diligent)
+2. Understand the [builder pattern](./di-containers/README.md#configuration-with-WireDI)
 3. Try [event dispatching](./event-dispatcher/EventEmitterDispatcherProvider.ts) (simple)
 
 ### For Intermediate Users
@@ -132,7 +132,7 @@ Each example directory has its own `tsconfig.json`:
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "paths": {
-      "@djodjonx/diligent": ["../../src/index.ts"]
+      "@djodjonx/wiredi": ["../../src/index.ts"]
     }
   }
 }
@@ -229,14 +229,14 @@ To add a new example:
 
 ## Built-in Providers
 
-`@djodjonx/diligent` includes providers for the most popular DI containers:
+`@djodjonx/wiredi` includes providers for the most popular DI containers:
 
 ```typescript
 import {
     TsyringeProvider,   // Built-in, recommended
     AwilixProvider,     // Requires 'awilix' package
     InversifyProvider,  // Requires 'inversify' package
-} from '@djodjonx/diligent'
+} from '@djodjonx/wiredi'
 ```
 
 ### tsyringe (Recommended)
@@ -244,7 +244,7 @@ import {
 ```typescript
 import 'reflect-metadata'
 import { container, Lifecycle } from 'tsyringe'
-import { useContainerProvider, TsyringeProvider } from '@djodjonx/diligent'
+import { useContainerProvider, TsyringeProvider } from '@djodjonx/wiredi'
 
 useContainerProvider(new TsyringeProvider({ container, Lifecycle }))
 ```
@@ -253,7 +253,7 @@ useContainerProvider(new TsyringeProvider({ container, Lifecycle }))
 
 ```typescript
 import * as awilix from 'awilix'
-import { useContainerProvider, AwilixProvider } from '@djodjonx/diligent'
+import { useContainerProvider, AwilixProvider } from '@djodjonx/wiredi'
 
 // Use createSync for synchronous initialization
 const provider = AwilixProvider.createSync(awilix, {
@@ -267,7 +267,7 @@ useContainerProvider(provider)
 ```typescript
 import 'reflect-metadata'
 import * as inversify from 'inversify'
-import { useContainerProvider, InversifyProvider } from '@djodjonx/diligent'
+import { useContainerProvider, InversifyProvider } from '@djodjonx/wiredi'
 
 // Use createSync for synchronous initialization
 const provider = InversifyProvider.createSync(inversify)
@@ -279,7 +279,7 @@ useContainerProvider(provider)
 To integrate a new DI container, implement the `ContainerProvider` interface:
 
 ```typescript
-import type { ContainerProvider, ProviderLifecycle } from '@djodjonx/diligent'
+import type { ContainerProvider, ProviderLifecycle } from '@djodjonx/wiredi'
 
 class MyCustomProvider implements ContainerProvider {
     readonly name = 'my-custom-provider'
@@ -324,7 +324,7 @@ class MyCustomProvider implements ContainerProvider {
 
 ## Lifecycle Mapping
 
-`@djodjonx/diligent` uses `ProviderLifecycle` enum that should be mapped to your DI container's lifecycle:
+`@djodjonx/wiredi` uses `ProviderLifecycle` enum that should be mapped to your DI container's lifecycle:
 
 | ProviderLifecycle | Description | tsyringe | Awilix | InversifyJS |
 |-------------------|-------------|----------|--------|-------------|
@@ -358,7 +358,7 @@ import {
     useEventDispatcherProvider,
     MutableEventDispatcherProvider,
     getContainerProvider,
-} from '@djodjonx/diligent'
+} from '@djodjonx/wiredi'
 
 // 1. Setup DI container first
 useContainerProvider(new MyProvider())

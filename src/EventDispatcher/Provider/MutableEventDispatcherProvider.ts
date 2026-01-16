@@ -27,7 +27,7 @@ import type { ContainerProvider } from '../../Provider'
  *     MutableEventDispatcherProvider,
  *     useEventDispatcherProvider,
  *     getContainerProvider
- * } from '@djodjonx/diligent'
+ * } from '@djodjonx/wiredi'
  *
  * const eventProvider = new MutableEventDispatcherProvider({
  *     containerProvider: getContainerProvider()

@@ -13,8 +13,8 @@ import type {
     EventDispatcherProviderOptions,
     EventToken,
     ListenerToken,
-} from '@djodjonx/diligent'
-import type { ContainerProvider } from '@djodjonx/diligent'
+} from '@djodjonx/wiredi'
+import type { ContainerProvider } from '@djodjonx/wiredi'
 
 /**
  * Configuration options for EventEmitterDispatcherProvider
@@ -42,7 +42,7 @@ export interface EventEmitterDispatcherOptions extends EventDispatcherProviderOp
  * @example
  * ```typescript
  * import { EventEmitterDispatcherProvider } from './EventEmitterDispatcherProvider'
- * import { useEventDispatcherProvider, getContainerProvider } from '@djodjonx/diligent'
+ * import { useEventDispatcherProvider, getContainerProvider } from '@djodjonx/wiredi'
  *
  * const eventProvider = new EventEmitterDispatcherProvider({
  *     containerProvider: getContainerProvider(),

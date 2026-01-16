@@ -15,7 +15,7 @@
   "excludeProtected": false,
   "excludeInternal": false,
   "readme": "README.md",
-  "name": "@djodjonx/diligent",
+  "name": "@djodjonx/wiredi",
   "includeVersion": true,
   "categorizeByGroup": true,
   "categoryOrder": [

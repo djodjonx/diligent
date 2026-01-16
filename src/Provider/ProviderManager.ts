@@ -1,5 +1,5 @@
 /**
- * Global Provider Manager for diligent
+ * Global Provider Manager for WireDI
  *
  * Manages the global DI container provider instance.
  * The provider should be configured once at application startup
@@ -30,7 +30,7 @@ let currentProvider: ContainerProvider | null = null
  * // main.ts - Application entry point
  * import 'reflect-metadata'
  * import { container, Lifecycle } from 'tsyringe'
- * import { useContainerProvider, TsyringeProvider } from '@djodjonx/diligent'
+ * import { useContainerProvider, TsyringeProvider } from '@djodjonx/wiredi'
  *
  * useContainerProvider(new TsyringeProvider({ container, Lifecycle }))
  *
@@ -40,7 +40,7 @@ let currentProvider: ContainerProvider | null = null
 export function useContainerProvider(provider: ContainerProvider): void {
     if (currentProvider !== null) {
         throw new Error(
-            `[diligent] Provider already configured (${currentProvider.name}). ` +
+            `[WireDI] Provider already configured (${currentProvider.name}). ` +
             `useContainerProvider() should only be called once at app entry point. ` +
             `Use resetContainerProvider() first if you need to reconfigure.`
         )
@@ -63,7 +63,7 @@ export function useContainerProvider(provider: ContainerProvider): void {
 export function getContainerProvider(): ContainerProvider {
     if (currentProvider === null) {
         throw new Error(
-            '[diligent] No container provider configured. ' +
+            '[WireDI] No container provider configured. ' +
             'Call useContainerProvider(provider) at your app entry point before using useBuilder. ' +
             'Example: useContainerProvider(new TsyringeProvider({ container, Lifecycle }))'
         )

@@ -27,7 +27,7 @@ export type ProviderToken<T = any> = symbol | Constructor<T>
  * DI Container Provider Interface
  *
  * Contract that each adapter (tsyringe, awilix, inversify, etc.)
- * must implement to be compatible with diligent.
+ * must implement to be compatible with WireDI.
  *
  * @example
  * ```typescript

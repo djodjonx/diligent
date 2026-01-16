@@ -1,4 +1,4 @@
-import useBuilder, { defineBuilderConfig } from '@djodjonx/diligent'
+import useBuilder, { defineBuilderConfig } from '@djodjonx/wiredi'
 
 // Partials
 import { commonServicesPartial } from './partials/commonServices'

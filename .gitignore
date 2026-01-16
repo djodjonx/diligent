@@ -8,6 +8,7 @@ build/
 *.tsbuildinfo
 # IDE
 .idea/
+*.iml
 .vscode/
 *.swp
 *.swo

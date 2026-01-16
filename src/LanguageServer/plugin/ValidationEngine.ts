@@ -246,6 +246,7 @@ export class ValidationEngine {
             const providerTypeName = this.checker.typeToString(providerType)
             const className = analyzedClass.name
             const tokenName = dependency.token.displayName
+            const paramIndex = dependency.parameterIndex
             const _builderId = config.builderId || config.variableName || 'unknown'
 
             // L'erreur est reportée sur le provider là où il est ENREGISTRÉ
@@ -255,10 +256,11 @@ export class ValidationEngine {
 
             return {
                 message:
-                    `[DI] Type incompatible: Le service "${className}" attend "${expectedTypeName}" ` +
-                    `pour "${tokenName}" (paramètre ${dependency.parameterIndex}), ` +
-                    `mais le provider "${registeredProvider.providerClassName || 'unknown'}" ` +
-                    `de type "${providerTypeName}" n'est pas compatible.`,
+                    `[WireDI] Type mismatch: Provider doesn't match expected type\n\n` +
+                    `Service '${className}' expects type '${expectedTypeName}' for '${tokenName}' (parameter #${paramIndex}),\n` +
+                    `but the registered provider '${registeredProvider.providerClassName || 'unknown'}' ` +
+                    `returns '${providerTypeName}'.\n\n` +
+                    `💡 Fix: Register a provider that implements '${expectedTypeName}' or use a factory to adapt the type.`,
                 file: errorSourceFile,
                 start: errorNode.getStart(errorSourceFile),
                 length: errorNode.getWidth(errorSourceFile),
@@ -267,7 +269,7 @@ export class ValidationEngine {
                         file: dependency.parameterNode.getSourceFile(),
                         start: dependency.parameterNode.getStart(),
                         length: dependency.parameterNode.getWidth(),
-                        message: `Le type "${expectedTypeName}" est attendu ici`,
+                        message: `The type '${expectedTypeName}' is expected here`,
                     },
                 ],
             }
@@ -288,6 +290,7 @@ export class ValidationEngine {
         const className = analyzedClass.name
         const tokenName = dependency.token.displayName
         const builderId = config.builderId || config.variableName || 'unknown'
+        const paramIndex = dependency.parameterIndex
 
         // L'erreur est reportée sur le provider dans la configuration
         const errorNode = provider.node
@@ -295,9 +298,10 @@ export class ValidationEngine {
 
         return {
             message:
-                `[DI] Dépendance manquante: Le service "${className}" requiert "${tokenName}" ` +
-                `(paramètre ${dependency.parameterIndex}) mais ce token n'est pas fourni ` +
-                `dans la configuration "${builderId}" ou ses parents.`,
+                `[WireDI] Missing dependency: '${className}' requires '${tokenName}' but it's not registered\n\n` +
+                `The service '${className}' expects '${tokenName}' as parameter #${paramIndex}, ` +
+                `but this token is not provided in the '${builderId}' configuration or its partials.\n\n` +
+                `💡 Fix: Add '{ token: ${tokenName} }' to your injections array.`,
             file: errorSourceFile,
             start: errorNode.getStart(errorSourceFile),
             length: errorNode.getWidth(errorSourceFile),
@@ -306,7 +310,7 @@ export class ValidationEngine {
                     file: dependency.parameterNode.getSourceFile(),
                     start: dependency.parameterNode.getStart(),
                     length: dependency.parameterNode.getWidth(),
-                    message: `La dépendance "${tokenName}" est requise ici`,
+                    message: `The dependency '${tokenName}' is required here`,
                 },
             ],
         }

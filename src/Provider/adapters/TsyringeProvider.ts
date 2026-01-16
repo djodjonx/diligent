@@ -1,5 +1,5 @@
 /**
- * tsyringe Provider Adapter for diligent
+ * tsyringe Provider Adapter for WireDI
  *
  * This adapter allows using tsyringe as the DI container backend.
  * tsyringe is Microsoft's lightweight dependency injection container
@@ -13,7 +13,7 @@
  * ```typescript
  * import 'reflect-metadata'
  * import { container, Lifecycle } from 'tsyringe'
- * import { useContainerProvider, TsyringeProvider } from '@djodjonx/diligent'
+ * import { useContainerProvider, TsyringeProvider } from '@djodjonx/wiredi'
  *
  * useContainerProvider(new TsyringeProvider({ container, Lifecycle }))
  * ```
@@ -117,9 +117,9 @@ export interface TsyringeProviderOptions {
 /**
  * tsyringe adapter implementing the ContainerProvider interface
  *
- * Provides integration between diligent and tsyringe,
+ * Provides integration between WireDI and tsyringe,
  * allowing you to use tsyringe as your DI container while benefiting
- * from diligent's configuration and validation features.
+ * from WireDI's configuration and validation features.
  */
 export class TsyringeProvider implements ContainerProvider {
     /** @inheritdoc */
@@ -232,7 +232,7 @@ export class TsyringeProvider implements ContainerProvider {
     }
 
     /**
-     * Maps diligent lifecycle to tsyringe Lifecycle
+     * Maps WireDI lifecycle to tsyringe Lifecycle
      * @internal
      */
     private mapLifecycle(lifecycle: ProviderLifecycle): unknown {

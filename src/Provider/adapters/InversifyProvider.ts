@@ -1,5 +1,5 @@
 /**
- * InversifyJS Provider Adapter for diligent
+ * InversifyJS Provider Adapter for WireDI
  *
  * This adapter allows using InversifyJS as the DI container backend.
  * InversifyJS is a powerful and lightweight inversion of control container
@@ -11,7 +11,7 @@
  *
  * @example Basic usage with lazy initialization
  * ```typescript
- * import { useContainerProvider, InversifyProvider } from '@djodjonx/diligent'
+ * import { useContainerProvider, InversifyProvider } from '@djodjonx/wiredi'
  *
  * const provider = new InversifyProvider()
  * await provider.init()
@@ -22,7 +22,7 @@
  * ```typescript
  * import 'reflect-metadata'
  * import * as inversify from 'inversify'
- * import { useContainerProvider, InversifyProvider } from '@djodjonx/diligent'
+ * import { useContainerProvider, InversifyProvider } from '@djodjonx/wiredi'
  *
  * useContainerProvider(InversifyProvider.createSync(inversify))
  * ```
@@ -79,9 +79,9 @@ export interface InversifyProviderOptions {
 /**
  * InversifyJS adapter implementing the ContainerProvider interface
  *
- * Provides integration between diligent and InversifyJS,
+ * Provides integration between WireDI and InversifyJS,
  * allowing you to use InversifyJS as your DI container while benefiting
- * from diligent's configuration and validation features.
+ * from WireDI's configuration and validation features.
  */
 export class InversifyProvider implements ContainerProvider {
     /** @inheritdoc */
@@ -179,7 +179,7 @@ export class InversifyProvider implements ContainerProvider {
     }
 
     /**
-     * Maps diligent lifecycle to InversifyJS binding scope
+     * Maps WireDI lifecycle to InversifyJS binding scope
      * @internal
      */
     private mapLifecycle(lifecycle?: ProviderLifecycle): BindingScope {

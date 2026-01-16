@@ -13,8 +13,8 @@ import type {
     EventDispatcherProviderOptions,
     EventToken,
     ListenerToken,
-} from '@djodjonx/diligent'
-import type { ContainerProvider } from '@djodjonx/diligent'
+} from '@djodjonx/wiredi'
+import type { ContainerProvider } from '@djodjonx/wiredi'
 
 /**
  * Priority levels for listeners
@@ -70,7 +70,7 @@ export interface AsyncPriorityEventDispatcherOptions extends EventDispatcherProv
  * @example
  * ```typescript
  * import { AsyncPriorityEventDispatcherProvider, ListenerPriority } from './AsyncPriorityEventDispatcherProvider'
- * import { useEventDispatcherProvider, getContainerProvider } from '@djodjonx/diligent'
+ * import { useEventDispatcherProvider, getContainerProvider } from '@djodjonx/wiredi'
  *
  * const eventProvider = new AsyncPriorityEventDispatcherProvider({
  *     containerProvider: getContainerProvider(),
@@ -320,7 +320,7 @@ class ReportGeneratorListener {
  * Example setup with priority ordering
  */
 async function setupPriorityHandling() {
-    const { getContainerProvider } = await import('diligent')
+    const { getContainerProvider } = await import('WireDI')
 
     const provider = new AsyncPriorityEventDispatcherProvider({
         containerProvider: getContainerProvider(),

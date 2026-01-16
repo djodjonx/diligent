@@ -1,5 +1,5 @@
 /**
- * Awilix Provider Adapter for diligent
+ * Awilix Provider Adapter for WireDI
  *
  * This adapter allows using Awilix as the DI container backend.
  * Awilix is a powerful dependency injection container for Node.js
@@ -11,7 +11,7 @@
  *
  * @example Basic usage with lazy initialization
  * ```typescript
- * import { useContainerProvider, AwilixProvider } from '@djodjonx/diligent'
+ * import { useContainerProvider, AwilixProvider } from '@djodjonx/wiredi'
  *
  * const provider = new AwilixProvider({ injectionMode: 'PROXY' })
  * await provider.init()
@@ -21,7 +21,7 @@
  * @example Synchronous initialization (recommended)
  * ```typescript
  * import * as awilix from 'awilix'
- * import { useContainerProvider, AwilixProvider } from '@djodjonx/diligent'
+ * import { useContainerProvider, AwilixProvider } from '@djodjonx/wiredi'
  *
  * useContainerProvider(AwilixProvider.createSync(awilix, {
  *     injectionMode: 'PROXY'
@@ -77,9 +77,9 @@ export interface AwilixProviderOptions {
 /**
  * Awilix adapter implementing the ContainerProvider interface
  *
- * Provides integration between diligent and Awilix,
+ * Provides integration between WireDI and Awilix,
  * allowing you to use Awilix as your DI container while benefiting
- * from diligent's configuration and validation features.
+ * from WireDI's configuration and validation features.
  */
 export class AwilixProvider implements ContainerProvider {
     /** @inheritdoc */
@@ -202,7 +202,7 @@ export class AwilixProvider implements ContainerProvider {
     }
 
     /**
-     * Maps diligent lifecycle to Awilix Lifetime
+     * Maps WireDI lifecycle to Awilix Lifetime
      * @internal
      */
     private mapLifecycle(lifecycle?: ProviderLifecycle): typeof Lifetime[keyof typeof Lifetime] {

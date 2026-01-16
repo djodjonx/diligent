@@ -21,8 +21,8 @@ import type {
     EventDispatcherProviderOptions,
     EventToken,
     ListenerToken,
-} from '@djodjonx/diligent'
-import type { ContainerProvider } from '@djodjonx/diligent'
+} from '@djodjonx/wiredi'
+import type { ContainerProvider } from '@djodjonx/wiredi'
 
 /**
  * RxJS-based Event Dispatcher Provider
@@ -33,7 +33,7 @@ import type { ContainerProvider } from '@djodjonx/diligent'
  * @example
  * ```typescript
  * import { RxJsEventDispatcherProvider } from './RxJsEventDispatcherProvider'
- * import { useEventDispatcherProvider, getContainerProvider } from '@djodjonx/diligent'
+ * import { useEventDispatcherProvider, getContainerProvider } from '@djodjonx/wiredi'
  *
  * const eventProvider = new RxJsEventDispatcherProvider({
  *     containerProvider: getContainerProvider()

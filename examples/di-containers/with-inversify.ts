@@ -1,5 +1,5 @@
 /**
- * Example: Using diligent with InversifyJS
+ * Example: Using WireDI with InversifyJS
  *
  * InversifyJS is a powerful and lightweight inversion of control container
  * for JavaScript & Node.js apps powered by TypeScript.
@@ -17,8 +17,8 @@ import {
     MutableEventDispatcherProvider,
     defineBuilderConfig,
     InversifyProvider,
-} from '@djodjonx/diligent'
-import useBuilder from '@djodjonx/diligent'
+} from '@djodjonx/wiredi'
+import useBuilder from '@djodjonx/wiredi'
 
 // ============================================================
 // 1. DEFINE TOKENS (Inversify typically uses symbols)

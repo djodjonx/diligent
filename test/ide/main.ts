@@ -7,7 +7,7 @@
 import { container, Lifecycle } from 'tsyringe'
 import 'reflect-metadata'
 
-import { useContainerProvider, TsyringeProvider } from '@djodjonx/diligent'
+import { useContainerProvider, TsyringeProvider } from '@djodjonx/wiredi'
 
 // ⚠️ IMPORTANT: Configurer le provider AVANT d'importer les builders
 // L'utilisateur passe les dépendances tsyringe - il a le contrôle total

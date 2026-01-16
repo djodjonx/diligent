@@ -1,4 +1,4 @@
-import { definePartialConfig } from '@djodjonx/diligent'
+import { definePartialConfig } from '@djodjonx/wiredi'
 import { TOKENS } from '../tokens'
 
 // Infrastructure imports

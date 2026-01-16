@@ -1,7 +1,7 @@
 {
-  "name": "@djodjonx/diligent",
-  "version": "0.0.3",
-  "description": "Diligent dependency injection - Type-safe DI container configuration with compile-time validation",
+  "name": "@djodjonx/wiredi",
+  "version": "0.0.1",
+  "description": "WireDI - Wire your dependency injection with type safety and compile-time validation",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -38,6 +38,8 @@
     "prepare": "husky"
   },
   "keywords": [
+    "wiredi",
+    "wire",
     "dependency-injection",
     "di",
     "ioc",

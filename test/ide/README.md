@@ -7,8 +7,8 @@ Ce dossier contient un mini-projet pour tester le plugin DI Validator dans l'IDE
 ### Étape 1 : Préparer le plugin
 
 ```bash
-# Depuis la racine du projet diligent
-cd /Users/jonathan/projects/diligent
+# Depuis la racine du projet WireDI
+cd /Users/jonathan/projects/WireDI
 
 # Compiler le plugin
 pnpm build:plugin
@@ -27,7 +27,7 @@ npm install
 
 1. **Ouvrir le dossier `test/ide` comme workspace séparé** :
    ```bash
-   code /Users/jonathan/projects/diligent/test/ide
+   code /Users/jonathan/projects/WireDI/test/ide
    ```
 
 2. **Sélectionner la version TypeScript du workspace** :

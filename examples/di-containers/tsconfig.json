@@ -12,7 +12,7 @@
     "noEmit": true,
     "baseUrl": "..",
     "paths": {
-      "@djodjonx/diligent": ["./src/index.ts"]
+      "@djodjonx/wiredi": ["./src/index.ts"]
     }
   },
   "include": ["./**/*.ts"],

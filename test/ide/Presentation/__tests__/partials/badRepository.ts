@@ -4,7 +4,7 @@
  */
 
 import { inject, injectable } from 'tsyringe'
-import { definePartialConfig } from '@djodjonx/diligent'
+import { definePartialConfig } from '@djodjonx/wiredi'
 
 // Interfaces
 interface ProductRepositoryInterface {

@@ -83,7 +83,7 @@ export class ConfigurationAnalyzer {
 
         // Vérifier sémantiquement que c'est bien la fonction de notre librairie
         if (!this.isFromContainerBuilder(node)) {
-            this.logger(`Fonction ${functionName} trouvée mais pas de diligent`)
+            this.logger(`Fonction ${functionName} trouvée mais pas de WireDI`)
             return null
         }
 
@@ -136,7 +136,7 @@ export class ConfigurationAnalyzer {
     }
 
     /**
-     * Vérifie si l'appel de fonction provient de diligent
+     * Vérifie si l'appel de fonction provient de WireDI
      * Utilise le TypeChecker pour une vérification sémantique
      */
     private isFromContainerBuilder(node: ts.CallExpression): boolean {
@@ -155,8 +155,8 @@ export class ConfigurationAnalyzer {
         const declSourceFile = declaration.getSourceFile()
         const fileName = declSourceFile.fileName
 
-        // Vérifier si le fichier provient de diligent ou du projet courant
-        return fileName.includes('diligent') ||
+        // Vérifier si le fichier provient de WireDI ou du projet courant
+        return fileName.includes('WireDI') ||
                fileName.includes('/src/index') ||
                !fileName.includes('node_modules')
     }

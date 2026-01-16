@@ -4,7 +4,7 @@
  */
 
 import { inject, injectable } from 'tsyringe'
-import { defineBuilderConfig } from '@djodjonx/diligent'
+import { defineBuilderConfig } from '@djodjonx/wiredi'
 import { badRepositoryPartial, TYPE_TEST_TOKENS } from './partials/badRepository'
 
 // Interface attendue

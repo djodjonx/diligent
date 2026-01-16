@@ -1,13 +1,13 @@
 /**
  * Example: Type Checking Without Decorators
  *
- * This example demonstrates that diligent's type checking
+ * This example demonstrates that WireDI's type checking
  * works perfectly WITHOUT any decorators.
  *
  * All type validation happens at the configuration level.
  */
 
-import { defineBuilderConfig, ProviderLifecycle } from '@djodjonx/diligent'
+import { defineBuilderConfig, ProviderLifecycle } from '@djodjonx/wiredi'
 
 // ============================================================
 // 1. DEFINE INTERFACES (No decorators)
@@ -292,7 +292,7 @@ export type {
 /**
  * SUMMARY:
  *
- * This example demonstrates that diligent provides
+ * This example demonstrates that WireDI provides
  * full type safety WITHOUT requiring any decorators.
  *
  * Type checking happens at:

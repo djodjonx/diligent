@@ -1,6 +1,6 @@
 # DI Container Provider Examples
 
-This directory contains examples showing how to integrate different DI containers with `@djodjonx/diligent`.
+This directory contains examples showing how to integrate different DI containers with `@djodjonx/wiredi`.
 
 ## Available Examples
 
@@ -13,7 +13,7 @@ This directory contains examples showing how to integrate different DI container
 
 ## Type Checking Without Decorators
 
-**Important**: `@djodjonx/diligent` provides full type safety **without requiring decorators**.
+**Important**: `@djodjonx/wiredi` provides full type safety **without requiring decorators**.
 
 Type checking happens at the **configuration level**, not at the decorator level. This means:
 
@@ -73,7 +73,7 @@ pnpm add inversify reflect-metadata
 ```typescript
 import 'reflect-metadata'
 import { container, Lifecycle } from 'tsyringe'
-import { useContainerProvider, TsyringeProvider } from '@djodjonx/diligent'
+import { useContainerProvider, TsyringeProvider } from '@djodjonx/wiredi'
 
 // Setup provider
 useContainerProvider(new TsyringeProvider({ container, Lifecycle }))
@@ -95,7 +95,7 @@ const userService = resolve(UserService)
 
 ```typescript
 import * as awilix from 'awilix'
-import { useContainerProvider, AwilixProvider } from '@djodjonx/diligent'
+import { useContainerProvider, AwilixProvider } from '@djodjonx/wiredi'
 
 // Setup provider with PROXY mode
 useContainerProvider(AwilixProvider.createSync(awilix, {
@@ -120,7 +120,7 @@ const userService = resolve(UserService)
 ```typescript
 import 'reflect-metadata'
 import * as inversify from 'inversify'
-import { useContainerProvider, InversifyProvider } from '@djodjonx/diligent'
+import { useContainerProvider, InversifyProvider } from '@djodjonx/wiredi'
 
 // Setup provider
 useContainerProvider(InversifyProvider.createSync(inversify))
@@ -159,17 +159,17 @@ npx tsx with-inversify.ts
 
 ## Built-in Providers
 
-All three providers are built into `@djodjonx/diligent`:
+All three providers are built into `@djodjonx/wiredi`:
 
 ```typescript
 import {
     TsyringeProvider,   // ✅ Built-in, recommended
     AwilixProvider,     // ✅ Built-in, requires 'awilix'
     InversifyProvider,  // ✅ Built-in, requires 'inversify'
-} from '@djodjonx/diligent'
+} from '@djodjonx/wiredi'
 ```
 
-## Configuration with diligent
+## Configuration with WireDI
 
 All examples follow the same pattern:
 
@@ -233,7 +233,7 @@ const loggingPartial = definePartialConfig({
 ### 3. Use Lifecycle Management
 
 ```typescript
-import { ProviderLifecycle } from '@djodjonx/diligent'
+import { ProviderLifecycle } from '@djodjonx/wiredi'
 
 {
     token: TOKENS.HttpClient,
@@ -250,7 +250,7 @@ Install the TypeScript plugin for real-time validation:
 {
   "compilerOptions": {
     "plugins": [
-      { "name": "@djodjonx/diligent/plugin" }
+      { "name": "@djodjonx/wiredi/plugin" }
     ]
   }
 }

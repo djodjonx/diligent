@@ -1,23 +1,41 @@
-# @djodjonx/diligent
+<p align="center">
+  <img src="logo/wiredi-banner-dark.svg" alt="WireDI" width="600">
+</p>
 
-[![npm version](https://img.shields.io/npm/v/@djodjonx/diligent.svg?style=flat-square)](https://www.npmjs.com/package/@djodjonx/diligent)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+<p align="center">
+  <a href="https://www.npmjs.com/package/@djodjonx/wiredi"><img src="https://img.shields.io/npm/v/@djodjonx/wiredi.svg?style=flat-square" alt="npm version"></a>
+  <a href="https://djodjonx.github.io/wiredi/"><img src="https://img.shields.io/badge/docs-GitHub%20Pages-blue?style=flat-square" alt="Documentation"></a>
+  <a href="https://github.com/djodjonx/wiredi/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/djodjonx/wiredi/ci.yml?style=flat-square" alt="CI"></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.0+-blue.svg?style=flat-square" alt="TypeScript"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License: MIT"></a>
+</p>
 
-**Diligent dependency injection - Type-safe DI container configuration with compile-time validation.**
+<h1 align="center">Wire your dependency injection with type safety</h1>
 
-`@djodjonx/diligent` is an abstraction layer on top of popular DI containers (tsyringe, Awilix, InversifyJS) that allows you to:
+<p align="center">
+  <strong>WireDI</strong> is an abstraction layer on top of popular DI containers (tsyringe, Awilix, InversifyJS) that wires your dependencies with compile-time validation.
+</p>
+
+---
+
+`@djodjonx/wiredi` allows you to:
 
 - ✅ **Detect missing dependencies** before runtime
 - ✅ **Verify type consistency** between interfaces and their implementations
 - ✅ **Compose configurations** with a reusable partials system
 - ✅ **Switch DI containers** without changing your business code
 
-## Why diligent?
+## 📚 Documentation
+
+- **[Full API Documentation](https://djodjonx.github.io/wiredi/)** - Complete TypeDoc API reference
+- **[Getting Started Guide](#quick-start)** - Start using WireDI in 5 minutes
+- **[Examples](./examples)** - Real-world integration examples
+
+## Why WireDI?
 
 Dependency injection containers like tsyringe or InversifyJS are powerful, but they fail **at runtime** when a dependency is missing or misconfigured.
 
-**With diligent**, these errors are detected **in your IDE** before you even run the code:
+**With WireDI**, these errors are detected **in your IDE** before you even run the code:
 
 ```typescript
 // ❌ Error detected in IDE: "Logger" is not registered
@@ -32,7 +50,7 @@ const config = defineBuilderConfig({
 
 ### Type Checking Without Decorators
 
-Unlike traditional DI containers, **diligent's type checking works without decorators**:
+Unlike traditional DI containers, **WireDI's type checking works without decorators**:
 
 - ✅ Type validation at **configuration time**, not runtime
 - ✅ Works with **plain TypeScript classes**
@@ -45,18 +63,18 @@ Unlike traditional DI containers, **diligent's type checking works without decor
 
 ```bash
 # With npm
-npm install @djodjonx/diligent
+npm install @djodjonx/wiredi
 
 # With pnpm
-pnpm add @djodjonx/diligent
+pnpm add @djodjonx/wiredi
 
 # With yarn
-yarn add @djodjonx/diligent
+yarn add @djodjonx/wiredi
 ```
 
 ### Install a DI Container
 
-`@djodjonx/diligent` supports multiple containers. Install the one of your choice:
+`@djodjonx/wiredi` supports multiple containers. Install the one of your choice:
 
 ```bash
 # Option 1: tsyringe (recommended)
@@ -80,7 +98,7 @@ npm install inversify reflect-metadata
 // main.ts
 import 'reflect-metadata'
 import { container, Lifecycle } from 'tsyringe'
-import { useContainerProvider, TsyringeProvider } from '@djodjonx/diligent'
+import { useContainerProvider, TsyringeProvider } from '@djodjonx/wiredi'
 
 useContainerProvider(new TsyringeProvider({ container, Lifecycle }))
 ```
@@ -93,7 +111,7 @@ useContainerProvider(new TsyringeProvider({ container, Lifecycle }))
 ```typescript
 // main.ts
 import * as awilix from 'awilix'
-import { useContainerProvider, AwilixProvider } from '@djodjonx/diligent'
+import { useContainerProvider, AwilixProvider } from '@djodjonx/wiredi'
 
 useContainerProvider(AwilixProvider.createSync(awilix, {
     injectionMode: 'PROXY', // or 'CLASSIC'
@@ -109,7 +127,7 @@ useContainerProvider(AwilixProvider.createSync(awilix, {
 // main.ts
 import 'reflect-metadata'
 import * as inversify from 'inversify'
-import { useContainerProvider, InversifyProvider } from '@djodjonx/diligent'
+import { useContainerProvider, InversifyProvider } from '@djodjonx/wiredi'
 
 useContainerProvider(InversifyProvider.createSync(inversify))
 ```
@@ -170,7 +188,7 @@ export const TOKENS = {
 
 ```typescript
 // config.ts
-import { defineBuilderConfig, definePartialConfig } from '@djodjonx/diligent'
+import { defineBuilderConfig, definePartialConfig } from '@djodjonx/wiredi'
 
 // Reusable partial configuration
 const loggingPartial = definePartialConfig({
@@ -196,7 +214,7 @@ export const appConfig = defineBuilderConfig({
 
 ```typescript
 // anywhere.ts
-import useBuilder from '@djodjonx/diligent'
+import useBuilder from '@djodjonx/wiredi'
 import { appConfig } from './config'
 
 const { resolve } = useBuilder(appConfig)
@@ -219,7 +237,7 @@ The TypeScript Language Service plugin detects configuration errors **directly i
   "compilerOptions": {
     "plugins": [
       {
-        "name": "@djodjonx/diligent/plugin"
+        "name": "@djodjonx/wiredi/plugin"
       }
     ]
   }
@@ -269,7 +287,7 @@ The error appears on the provider line, even if it's defined in a separate parti
   "compilerOptions": {
     "plugins": [
       {
-        "name": "@djodjonx/diligent/plugin",
+        "name": "@djodjonx/wiredi/plugin",
         "verbose": true  // Enable debug logs
       }
     ]
@@ -294,7 +312,7 @@ The error appears on the provider line, even if it's defined in a separate parti
 ### With custom lifecycle
 
 ```typescript
-import { ProviderLifecycle } from '@djodjonx/diligent'
+import { ProviderLifecycle } from '@djodjonx/wiredi'
 
 { token: UserService, lifecycle: ProviderLifecycle.Transient }
 ```
@@ -398,7 +416,7 @@ export const testConfig = defineBuilderConfig({
 To use an unsupported DI container, implement the `ContainerProvider` interface:
 
 ```typescript
-import type { ContainerProvider, ProviderLifecycle } from '@djodjonx/diligent'
+import type { ContainerProvider, ProviderLifecycle } from '@djodjonx/wiredi'
 
 class MyCustomProvider implements ContainerProvider {
     readonly name = 'my-provider'
@@ -448,7 +466,7 @@ import {
     useEventDispatcherProvider,
     MutableEventDispatcherProvider,
     getEventDispatcherProvider
-} from '@djodjonx/diligent'
+} from '@djodjonx/wiredi'
 
 // Configuration
 useEventDispatcherProvider(new MutableEventDispatcherProvider({
@@ -465,7 +483,7 @@ getEventDispatcherProvider().dispatch(new UserCreatedEvent(user))
 
 Full API documentation is available online and can be generated locally:
 
-**Online**: [View API Documentation](https://[your-username].github.io/diligent/) *(configure GitHub Pages)*
+**Online**: [View API Documentation](https://[your-username].github.io/WireDI/) *(configure GitHub Pages)*
 
 **Generate locally**:
 ```bash
