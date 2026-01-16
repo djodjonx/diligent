@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "warn",
+    "suspicious": "warn",
+    "pedantic": "off"
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  }
+}
