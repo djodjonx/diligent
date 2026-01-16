@@ -24,6 +24,8 @@
     "**/testUtils",
     "**/*.test.ts",
     "**/*.spec.ts",
-    "src/LanguageServer/**/*"
+    "src/LanguageServer/**/*",
+    "examples/**/*",
+    "test/**/*"
   ]
 }
