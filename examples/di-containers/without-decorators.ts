@@ -238,10 +238,10 @@ const configWithValues = defineBuilderConfig({
         // ✅ Value injection with type checking
         {
             token: TOKENS_CONFIG.AppConfig,
-            value: (context) => ({
+            value: () => ({
                 apiUrl: 'https://api.example.com',
                 timeout: 5000
-            } as AppConfig)
+            })
         }
     ],
     listeners: []

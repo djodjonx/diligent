@@ -53,7 +53,7 @@ type Constructor<T = any> = new (...args: any[]) => T
 
 interface BuilderConfigEntryValue<C = null> {
     token: symbol
-    value: <R>(context?: C) => R
+    value: (context?: C) => any
 }
 
 interface BuilderConfigEntryInjectionWithToken {
