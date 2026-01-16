@@ -1,0 +1,93 @@
+{
+  "name": "@djodjonx/diligent",
+  "version": "0.0.1",
+  "description": "Diligent dependency injection - Type-safe DI container configuration with compile-time validation",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./plugin": {
+      "require": "./dist/plugin/index.js",
+      "types": "./dist/plugin/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "plugin.js",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "pnpm build:lib && pnpm build:plugin",
+    "build:lib": "tsdown",
+    "build:plugin": "node scripts/build-plugin.mjs",
+    "docs": "typedoc",
+    "docs:watch": "typedoc --watch",
+    "docs:json": "typedoc --json docs/api/documentation.json",
+    "validate:di": "tsx src/LanguageServer/cli.ts",
+    "validate:di:watch": "tsx src/LanguageServer/watch.ts",
+    "dev": "tsdown --watch",
+    "lint": "oxlint src",
+    "release": "standard-version",
+    "type-check": "tsc --noEmit",
+    "prepare": "husky"
+  },
+  "keywords": [
+    "dependency-injection",
+    "di",
+    "ioc",
+    "container",
+    "typescript",
+    "type-safe",
+    "validation",
+    "compile-time",
+    "tsyringe",
+    "awilix",
+    "inversify",
+    "type-checking"
+  ],
+  "author": "",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "pnpm@10.19.0",
+  "peerDependencies": {
+    "awilix": "^10.0.0 || ^11.0.0 || ^12.0.0",
+    "inversify": "^6.0.0 || ^7.0.0",
+    "reflect-metadata": "^0.1.0 || ^0.2.0",
+    "tsyringe": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "tsyringe": {
+      "optional": true
+    },
+    "awilix": {
+      "optional": true
+    },
+    "inversify": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.3.1",
+    "@commitlint/config-conventional": "^20.3.1",
+    "@types/node": "^25.0.8",
+    "awilix": "^12.0.5",
+    "husky": "^9.1.7",
+    "inversify": "^7.11.0",
+    "oxlint": "^1.39.0",
+    "reflect-metadata": "^0.2.2",
+    "standard-version": "^9.5.0",
+    "tsdown": "0.20.0-beta.3",
+    "tsx": "^4.19.0",
+    "tsyringe": "^4.10.0",
+    "typedoc": "^0.28.16",
+    "typescript": "^5.9.3"
+  }
+}
