@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/djodjonx/diligent/compare/v0.0.7...v0.0.8) (2026-01-16)
+
+
+### Bug Fixes
+
+* **readme:** correct GitHub URLs to use wireDI (with capital D) ([c413e94](https://github.com/djodjonx/diligent/commit/c413e94f2f36dd9dc8a854b10a7884b4f59b1f56))
+* **readme:** use absolute GitHub URL for logo to display on npm ([d6c0d81](https://github.com/djodjonx/diligent/commit/d6c0d81ab4c3989d94b9fcf1ae5632e6aabc600b))
+
 ### [0.0.7](https://github.com/djodjonx/diligent/compare/v0.0.6...v0.0.7) (2026-01-16)
 
 
