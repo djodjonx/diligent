@@ -15,8 +15,8 @@ import {
     MutableEventDispatcherProvider,
     defineBuilderConfig,
     AwilixProvider,
+    useBuilder,
 } from '@djodjonx/wiredi'
-import useBuilder from '@djodjonx/wiredi'
 
 // ============================================================
 // 1. DEFINE YOUR SERVICES

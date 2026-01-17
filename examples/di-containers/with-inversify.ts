@@ -17,8 +17,8 @@ import {
     MutableEventDispatcherProvider,
     defineBuilderConfig,
     InversifyProvider,
+    useBuilder,
 } from '@djodjonx/wiredi'
-import useBuilder from '@djodjonx/wiredi'
 
 // ============================================================
 // 1. DEFINE TOKENS (Inversify typically uses symbols)

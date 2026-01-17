@@ -516,7 +516,7 @@ export function defineBuilderConfig<
  * const service = resolve(MyService)
  * ```
  */
-export default function useBuilder<C = null, Tokens extends readonly any[] = []>(
+export function useBuilder<C = null, Tokens extends readonly any[] = []>(
     config: TypedBuilderConfig<C, Tokens>,
     context?: C,
 ): IUseBuilder<Tokens[number]> {

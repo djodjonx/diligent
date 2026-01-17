@@ -230,7 +230,7 @@ export const appConfig = defineBuilderConfig({
 
 ```typescript
 // anywhere.ts
-import useBuilder from '@djodjonx/wiredi'
+import { useBuilder } from '@djodjonx/wiredi'
 import { appConfig } from './config'
 
 const { resolve } = useBuilder(appConfig)
