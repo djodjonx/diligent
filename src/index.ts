@@ -49,32 +49,50 @@ export type {
     EventListenerEntry,
 } from './EventDispatcher/Provider/index'
 
-type Constructor<T = unknown> = new (...args: unknown[]) => T
+// Generic constructor type - 'any[]' is required for constructor args compatibility
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Constructor<T = unknown> = new (...args: any[]) => T
 
-interface BuilderConfigEntryValue<C = null> {
+/**
+ * Value injection entry - registers a static value for a token
+ * @template C - Context type passed to the value function
+ * @template T - Type of the value returned
+ */
+interface BuilderConfigEntryValue<C = null, T = unknown> {
     token: symbol
-    value: (context?: C) => any
+    value: (context?: C) => T
 }
 
-interface BuilderConfigEntryInjectionWithToken {
+/**
+ * Injection with symbol token and provider class
+ * @template T - Type of the instance created by the provider
+ */
+interface BuilderConfigEntryInjectionWithToken<T = unknown> {
     token: symbol
-    provider: Constructor
+    provider: Constructor<T>
     lifecycle?: ProviderLifecycle
 }
 
+/**
+ * Injection using a class as both token and provider
+ */
 interface BuilderConfigEntryInjectionWithClass {
     token: Constructor
     lifecycle?: ProviderLifecycle
 }
 
-interface BuilderConfigEntryFactory {
+/**
+ * Factory injection entry - registers a factory function for a token
+ * @template T - Type of the instance returned by the factory
+ */
+interface BuilderConfigEntryFactory<T = unknown> {
     token: symbol
-    factory: (provider: ContainerProvider) => any
+    factory: (provider: ContainerProvider) => T
 }
 
-type BuilderConfigEntries<C> = BuilderConfigEntryValue<C>
-    | BuilderConfigEntryInjectionWithToken
-    | BuilderConfigEntryFactory
+type BuilderConfigEntries<C> = BuilderConfigEntryValue<C, unknown>
+    | BuilderConfigEntryInjectionWithToken<unknown>
+    | BuilderConfigEntryFactory<unknown>
     | BuilderConfigEntryInjectionWithClass
 
 
@@ -274,27 +292,64 @@ type ExtractListenersFromPartials<T extends readonly TypedPartialConfig<any, any
  * Rules:
  * 1. Token exists in Partial -> ❌ Error: Token collision (duplicates not allowed)
  * 2. Token NOT in Partial -> ✅ Valid New Entry
+ * 3. Token duplicated in same array -> ❌ Error: Internal duplication
  *
  * Note: Token overrides are not allowed. Each token must be unique across all partials
  * and the main configuration. This prevents accidental redefinition of dependencies.
  */
 type ValidateInjections<LocalInjections, InheritedTokenUnion> =
     [InheritedTokenUnion] extends [never]
-        // No inherited tokens, all local injections are valid (no collision possible)
-        ? LocalInjections
-        : {
-            [K in keyof LocalInjections]: LocalInjections[K] extends { token: infer T }
-                ? T extends InheritedTokenUnion
-                    ? {
-                        // eslint-disable-next-line max-len
-                        error: '[WireDI] This token is already registered in a partial. Remove it from here or from the partial to avoid conflicts.'
-                        token: T
-                        // eslint-disable-next-line max-len
-                        hint: 'Each token can only be registered once across all partials and the main config.'
-                    }
-                    : LocalInjections[K] // ✅ Valid New Entry
-                : LocalInjections[K]
-        }
+        // No inherited tokens, validate only internal duplicates
+        ? ValidateInjectionsInternal<LocalInjections>
+        : ValidateInjectionsInternal<ValidateAgainstPartials<LocalInjections, InheritedTokenUnion>>
+
+/**
+ * Validates injections against inherited tokens from partials.
+ */
+type ValidateAgainstPartials<LocalInjections, InheritedTokenUnion> = {
+    [K in keyof LocalInjections]: LocalInjections[K] extends { token: infer T }
+        ? T extends InheritedTokenUnion
+            ? {
+                error: '[WireDI] This token is already registered in a partial. Remove it from here or from the partial to avoid conflicts.'
+                token: T
+                hint: 'Each token can only be registered once across all partials and the main config.'
+            }
+            : LocalInjections[K]
+        : LocalInjections[K]
+}
+
+/**
+ * Validates that there are no duplicate tokens within the same injections array.
+ * Checks each token against all following entries.
+ */
+type ValidateInjectionsInternal<T> = T extends readonly []
+    ? T
+    : T extends readonly [infer First, ...infer Rest]
+        ? First extends { token: infer Token }
+            ? HasTokenDuplicate<Token, Rest> extends true
+                ? [
+                    {
+                        error: '[WireDI] Duplicate token in the same configuration'
+                        token: Token
+                        hint: 'Each token can only be registered once. Remove one of the duplicate entries.'
+                    },
+                    ...ValidateInjectionsInternal<Rest>
+                ]
+                : [First, ...ValidateInjectionsInternal<Rest>]
+            : [First, ...ValidateInjectionsInternal<Rest>]
+        : T
+
+/**
+ * Helper to check if a token exists in the rest of the array.
+ * Uses strict type equality to avoid false positives.
+ */
+type HasTokenDuplicate<Token, Rest> = Rest extends readonly [infer First, ...infer Tail]
+    ? First extends { token: infer T }
+        ? StrictEquals<Token, T> extends true
+            ? true
+            : HasTokenDuplicate<Token, Tail>
+        : HasTokenDuplicate<Token, Tail>
+    : false
 
 /**
  * Validates that local listeners do not duplicate listeners already defined in partials.
