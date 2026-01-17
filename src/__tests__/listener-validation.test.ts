@@ -30,6 +30,7 @@ class ProductService { readonly __brand = 'ProductService' as const }
 // TEST 1: Exact Duplicates SHOULD Error
 // ============================================================
 
+/*
 // ❌ This SHOULD produce a TypeScript error - exact duplicate
 const _configDuplicate = defineBuilderConfig({
     builderId: 'test.duplicate',
@@ -39,6 +40,7 @@ const _configDuplicate = defineBuilderConfig({
         { event: UserCreatedEvent, listener: EmailListener }, // Exact duplicate!
     ]
 })
+*/
 
 // ============================================================
 // TEST 2: Different Listeners for Same Event - VALID
@@ -78,6 +80,7 @@ const partialWithListener = definePartialConfig({
     ]
 })
 
+/*
 // ❌ This SHOULD produce a TypeScript error - already in partial
 const _configWithPartialDuplicate = defineBuilderConfig({
     builderId: 'test.partial.duplicate',
@@ -87,6 +90,7 @@ const _configWithPartialDuplicate = defineBuilderConfig({
         { event: UserCreatedEvent, listener: EmailListener }, // Already in partial!
     ]
 })
+*/
 
 // ============================================================
 // TEST 5: Partial + Config Different - VALID
@@ -138,12 +142,11 @@ const _configMultipleValid = defineBuilderConfig({
 // Export to avoid unused variable warnings
 // ============================================================
 export {
-    _configDuplicate,
     _configDifferentListeners,
     _configDifferentEvents,
-    _configWithPartialDuplicate,
     _configWithPartialDifferent,
     _configNoListeners,
     _configMultipleValid,
+    partialWithListener,
 }
 

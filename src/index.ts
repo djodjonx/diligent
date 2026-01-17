@@ -157,9 +157,11 @@ export interface TypedBuilderConfig<C, Tokens> extends BuilderConfig<C> {
  * A partial builder configuration with strictly inferred token types.
  * @template C The context type.
  * @template Tokens The tuple of allowed tokens.
+ * @template Listeners The tuple of listener entries.
  */
-export interface TypedPartialConfig<C, Tokens> extends PartialBuilderConfig<C> {
+export interface TypedPartialConfig<C, Tokens, Listeners = readonly EventEntry[]> extends PartialBuilderConfig<C> {
     readonly __tokens?: Tokens
+    readonly __listeners?: Listeners
 }
 
 /**
@@ -252,10 +254,14 @@ function registerEvent(
  * @param config The partial builder configuration object.
  * @returns The configuration object typed as TypedPartialConfig.
  */
-export function definePartialConfig<C = null, const I extends InjectionConfig<C> = InjectionConfig<C>>(
-    config: PartialBuilderConfig<C> & { injections?: I },
-): TypedPartialConfig<C, ExtractTokens<I>> {
-    return config as any
+export function definePartialConfig<
+    C = null,
+    const I extends InjectionConfig<C> = InjectionConfig<C>,
+    const L extends EventConfig = EventConfig,
+>(
+    config: PartialBuilderConfig<C> & { injections?: I, listeners?: L },
+): TypedPartialConfig<C, ExtractTokens<I>, L> {
+    return config as TypedPartialConfig<C, ExtractTokens<I>, L>
 }
 
 // --- Type Helpers for `defineBuilderConfig` Extension Logic ---
@@ -263,28 +269,37 @@ export function definePartialConfig<C = null, const I extends InjectionConfig<C>
 /**
  * Recursively extracts tokens from a tuple of TypedPartialConfigs.
  */
-// eslint-disable-next-line max-len
-type ExtractTokensFromTypedPartials<T extends readonly TypedPartialConfig<any, any>[]> = T extends readonly [infer Head, ...infer Tail]
-    ? Tail extends readonly TypedPartialConfig<any, any>[]
-        ? Head extends TypedPartialConfig<any, infer Tokens>
-            ? Tokens extends readonly any[]
-                ? [...Tokens, ...ExtractTokensFromTypedPartials<Tail>]
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ExtractTokensFromTypedPartials<T extends readonly TypedPartialConfig<any, any, any>[]> =
+    T extends readonly [infer Head, ...infer Tail]
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ? Tail extends readonly TypedPartialConfig<any, any, any>[]
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            ? Head extends TypedPartialConfig<any, infer Tokens, any>
+                ? Tokens extends readonly unknown[]
+                    ? [...Tokens, ...ExtractTokensFromTypedPartials<Tail>]
+                    : ExtractTokensFromTypedPartials<Tail>
                 : ExtractTokensFromTypedPartials<Tail>
-            : ExtractTokensFromTypedPartials<Tail>
+            : []
         : []
-    : []
 
 /**
  * Helper to extract (Event, Listener) pairs from partials for duplicate checking.
+ * Uses the __listeners type parameter from TypedPartialConfig.
  */
-// eslint-disable-next-line max-len
-type ExtractListenersFromPartials<T extends readonly TypedPartialConfig<any, any>[]> = T extends readonly [infer Head, ...infer Tail]
-    ? Tail extends readonly TypedPartialConfig<any, any>[]
-        ? Head extends { listeners?: readonly (infer L)[] }
-            ? L | ExtractListenersFromPartials<Tail>
-            : ExtractListenersFromPartials<Tail>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ExtractListenersFromPartials<T extends readonly TypedPartialConfig<any, any, any>[]> =
+    T extends readonly [infer Head, ...infer Tail]
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ? Tail extends readonly TypedPartialConfig<any, any, any>[]
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            ? Head extends TypedPartialConfig<any, any, infer Listeners>
+                ? Listeners extends readonly (infer L)[]
+                    ? L | ExtractListenersFromPartials<Tail>
+                    : ExtractListenersFromPartials<Tail>
+                : ExtractListenersFromPartials<Tail>
+            : never
         : never
-    : never
 
 /**
  * Validates that injections do not collide with tokens from inherited partials.
@@ -559,7 +574,8 @@ type HasExactDuplicate<E, L, Rest> = Rest extends readonly [infer First, ...infe
  */
 export function defineBuilderConfig<
     C = null,
-    const Partials extends readonly TypedPartialConfig<C, any>[] = [],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const Partials extends readonly TypedPartialConfig<C, any, any>[] = [],
     const LocalInjections extends InjectionConfig<C> = InjectionConfig<C>,
     const LocalListeners extends EventConfig | undefined = EventConfig | undefined,
 >(

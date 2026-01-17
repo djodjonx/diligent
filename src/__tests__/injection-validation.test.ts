@@ -174,7 +174,7 @@ const configDuplicateToken = defineBuilderConfig({
     builderId: 'test.error.duplicate',
     injections: [
         { token: TOKENS.Logger, provider: ConsoleLogger },
-        { token: TOKENS.Logger, provider: FileLogger }, // ❌ Error: Duplicate token
+        { token: TOKENS.Logger, provider: ConsoleLogger }, // ❌ Error: Duplicate token
     ],
 })
 
@@ -183,7 +183,7 @@ const configDuplicateFromPartial = defineBuilderConfig({
     builderId: 'test.error.partial',
     extends: [partialWithLogger],
     injections: [
-        { token: TOKENS.Logger, provider: FileLogger }, // ❌ Error: Already in partial
+        { token: TOKENS.Logger, provider: ConsoleLogger }, // ❌ Error: Already in partial
     ],
 })
 
@@ -201,10 +201,11 @@ const configMixedDuplicate = defineBuilderConfig({
     builderId: 'test.error.mixed',
     injections: [
         { token: TOKENS.Logger, provider: ConsoleLogger },
-        { token: TOKENS.Logger, factory: () => new FileLogger() }, // ❌ Error: Duplicate
+        { token: TOKENS.Logger, factory: () => new ConsoleLogger() }, // ❌ Error: Duplicate
     ],
 })
 */
+
 
 // ============================================================
 // Type-level tests to verify validation types work
