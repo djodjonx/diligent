@@ -85,7 +85,7 @@ const config = defineBuilderConfig({
     injections: [
         { token: UserService }, // UserService nécessite Logger
     ],
-    listeners: [],
+    // listeners is optional
 })
 ```
 
@@ -98,7 +98,7 @@ const config = defineBuilderConfig({
         { token: Logger },      // ✅ Ajouter Logger
         { token: UserService },
     ],
-    listeners: [],
+    // listeners is optional
 })
 ```
 
@@ -123,7 +123,7 @@ const config = defineBuilderConfig({
         { token: MY_TOKEN, provider: MyProvider }, // ✅ Ajouter le token
         { token: OrderService },
     ],
-    listeners: [],
+    // listeners is optional
 })
 ```
 
@@ -146,7 +146,7 @@ const config = defineBuilderConfig({
     injections: [
         { token: TOKENS.ProductRepository, provider: ConsoleLogger }, // ❌ Type mismatch!
     ],
-    listeners: [],
+    // listeners is optional
 })
 ```
 
@@ -164,7 +164,7 @@ const config = defineBuilderConfig({
     injections: [
         { token: TOKENS.ProductRepository, provider: InMemoryProductRepository }, // ✅
     ],
-    listeners: [],
+    // listeners is optional
 })
 ```
 

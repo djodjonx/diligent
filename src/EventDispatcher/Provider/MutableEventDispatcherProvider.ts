@@ -114,6 +114,14 @@ export class MutableEventDispatcherProvider implements EventDispatcherProvider {
     }
 
     /** @inheritdoc */
+    hasListener(eventToken: EventToken, listenerToken: ListenerToken): boolean {
+        const eventName = this.getEventName(eventToken)
+        const listeners = this.listeners.get(eventName)
+        if (!listeners) return false
+        return listeners.includes(listenerToken)
+    }
+
+    /** @inheritdoc */
     clearListeners(eventToken: EventToken): void {
         const eventName = this.getEventName(eventToken)
         this.listeners.delete(eventName)

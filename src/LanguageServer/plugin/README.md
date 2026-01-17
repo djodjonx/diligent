@@ -85,7 +85,7 @@ const loggingPartial = definePartialConfig({
     injections: [
         { token: TOKENS.Logger, provider: ConsoleLogger },
     ],
-    listeners: [],
+    // listeners is optional
 })
 
 // Configuration principale
@@ -95,7 +95,7 @@ const appConfig = defineBuilderConfig({
     injections: [
         { token: UserService }, // ❌ Erreur: TOKENS.UserRepo non enregistré
     ],
-    listeners: [],
+    // listeners is optional
 })
 ```
 

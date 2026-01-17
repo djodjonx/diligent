@@ -100,6 +100,15 @@ export interface EventDispatcherProvider {
     hasListeners(eventToken: EventToken): boolean
 
     /**
+     * Checks if a specific listener is registered for an event type
+     *
+     * @param eventToken - The event class/constructor
+     * @param listenerToken - The listener class/symbol
+     * @returns `true` if the listener is already registered
+     */
+    hasListener(eventToken: EventToken, listenerToken: ListenerToken): boolean
+
+    /**
      * Removes all listeners for a specific event type
      *
      * @param eventToken - The event class/constructor to clear
