@@ -31,7 +31,6 @@ class ProductService { readonly __brand = 'ProductService' as const }
 // ============================================================
 
 // ❌ This SHOULD produce a TypeScript error - exact duplicate
-// @ts-expect-error Duplicate: same event AND same listener
 const _configDuplicate = defineBuilderConfig({
     builderId: 'test.duplicate',
     injections: [],
@@ -80,7 +79,6 @@ const partialWithListener = definePartialConfig({
 })
 
 // ❌ This SHOULD produce a TypeScript error - already in partial
-// @ts-expect-error Duplicate: listener already in partial
 const _configWithPartialDuplicate = defineBuilderConfig({
     builderId: 'test.partial.duplicate',
     extends: [partialWithListener],

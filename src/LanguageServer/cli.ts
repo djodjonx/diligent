@@ -7,7 +7,6 @@ import * as ts from 'typescript'
 import * as path from 'path'
 
 // Import dynamique du ValidationEngine compilé en CommonJS
-// @ts-expect-error - Le plugin est compilé séparément en CommonJS
 const { ValidationEngine } = await import('../../dist/plugin/ValidationEngine.js')
 
 const args = process.argv.slice(2)
