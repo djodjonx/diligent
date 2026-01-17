@@ -305,50 +305,90 @@ type ValidateInjections<LocalInjections, InheritedTokenUnion> =
 
 /**
  * Validates injections against inherited tokens from partials.
+ *
+ * Note: Plain symbols are skipped because TypeScript sees all Symbol() as the same type.
+ * Use branded symbols or class tokens for proper partial validation.
  */
 type ValidateAgainstPartials<LocalInjections, InheritedTokenUnion> = {
     [K in keyof LocalInjections]: LocalInjections[K] extends { token: infer T }
-        ? T extends InheritedTokenUnion
-            ? {
-                error: '[WireDI] This token is already registered in a partial. Remove it from here or from the partial to avoid conflicts.'
-                token: T
-                hint: 'Each token can only be registered once across all partials and the main config.'
-            }
-            : LocalInjections[K]
+        ? T extends symbol
+            ? symbol extends T
+                ? LocalInjections[K] // Plain symbol - skip validation
+                : T extends InheritedTokenUnion // Branded symbol - validate
+                    ? {
+                        error: '[WireDI] This token is already registered in a partial. Remove it from here or from the partial to avoid conflicts.'
+                        token: T
+                        hint: 'Each token can only be registered once across all partials and the main config.'
+                    }
+                    : LocalInjections[K]
+            : T extends InheritedTokenUnion // Class or other token - validate
+                ? {
+                    error: '[WireDI] This token is already registered in a partial. Remove it from here or from the partial to avoid conflicts.'
+                    token: T
+                    hint: 'Each token can only be registered once across all partials and the main config.'
+                }
+                : LocalInjections[K]
         : LocalInjections[K]
 }
 
 /**
  * Validates that there are no duplicate tokens within the same injections array.
  * Checks each token against all following entries.
+ *
+ * Note: Plain symbols (Symbol('x')) are skipped because TypeScript sees them all as type 'symbol'.
+ * For duplicate detection with symbols, use branded symbols: Symbol('x') as symbol & { __brand: 'x' }
  */
 type ValidateInjectionsInternal<T> = T extends readonly []
     ? T
     : T extends readonly [infer First, ...infer Rest]
         ? First extends { token: infer Token }
-            ? HasTokenDuplicate<Token, Rest> extends true
-                ? [
-                    {
-                        error: '[WireDI] Duplicate token in the same configuration'
-                        token: Token
-                        hint: 'Each token can only be registered once. Remove one of the duplicate entries.'
-                    },
-                    ...ValidateInjectionsInternal<Rest>
-                ]
-                : [First, ...ValidateInjectionsInternal<Rest>]
+            ? IsPlainSymbol<Token> extends true
+                ? [First, ...ValidateInjectionsInternal<Rest>] // Skip plain symbols
+                : HasTokenDuplicate<Token, Rest> extends true
+                    ? [
+                        {
+                            error: '[WireDI] Duplicate token in the same configuration'
+                            token: Token
+                            hint: 'Each token can only be registered once. Remove one of the duplicate entries.'
+                        },
+                        ...ValidateInjectionsInternal<Rest>
+                    ]
+                    : [First, ...ValidateInjectionsInternal<Rest>]
             : [First, ...ValidateInjectionsInternal<Rest>]
         : T
 
 /**
+ * Checks if a type is a plain symbol (not branded).
+ * Plain symbols are Symbol() without intersection types.
+ */
+type IsPlainSymbol<T> = T extends symbol
+    ? symbol extends T
+        ? true  // T is exactly 'symbol' (plain, not branded)
+        : false // T is a branded symbol (symbol & { ... })
+    : false     // T is not a symbol at all
+
+/**
  * Helper to check if a token exists in the rest of the array.
  * Uses strict type equality to avoid false positives.
+ *
+ * Note: Plain symbols without branding (e.g., Symbol('x')) are all seen as 'symbol' type
+ * by TypeScript, so we skip duplicate detection for plain symbols to avoid false positives.
+ * For proper token validation, use branded symbols or class tokens.
  */
-type HasTokenDuplicate<Token, Rest> = Rest extends readonly [infer First, ...infer Tail]
+type HasTokenDuplicate<Token, Rest> =
+    // Skip duplicate detection for plain symbols (they're all the same type to TS)
+    Token extends symbol
+        ? symbol extends Token
+            ? false // Plain symbol without branding - skip detection
+            : HasTokenDuplicateCheck<Token, Rest> // Branded symbol - check for duplicates
+        : HasTokenDuplicateCheck<Token, Rest> // Class or other token - check for duplicates
+
+type HasTokenDuplicateCheck<Token, Rest> = Rest extends readonly [infer First, ...infer Tail]
     ? First extends { token: infer T }
         ? StrictEquals<Token, T> extends true
             ? true
-            : HasTokenDuplicate<Token, Tail>
-        : HasTokenDuplicate<Token, Tail>
+            : HasTokenDuplicateCheck<Token, Tail>
+        : HasTokenDuplicateCheck<Token, Tail>
     : false
 
 /**
