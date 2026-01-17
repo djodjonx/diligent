@@ -13,7 +13,7 @@
 <h1 align="center">Wire your dependency injection with type safety</h1>
 
 <p align="center">
-  <strong>WireDI</strong> is an abstraction layer on top of popular DI containers (tsyringe, Awilix, InversifyJS) that wires your dependencies with compile-time validation.
+  <strong>WireDI</strong> is a declarative, type-safe Dependency Injection builder. It eliminates "autowire" magic in favor of explicit, compile-time validated definitions, ensuring your application is free from missing dependencies and type mismatches.
 </p>
 
 ---
@@ -33,9 +33,24 @@
 
 ## Why WireDI?
 
-Dependency injection containers like tsyringe or InversifyJS are powerful, but they fail **at runtime** when a dependency is missing or misconfigured.
+Traditional DI containers (like tsyringe, InversifyJS) are powerful but often rely on runtime "magic" (autowiring) that can lead to:
+- 💥 **Runtime errors** when dependencies are missing.
+- 🐛 **Silent failures** when incorrect types are injected.
 
-**With WireDI**, these errors are detected **in your IDE** before you even run the code:
+**WireDI** solves this by shifting validation to **compile-time**:
+
+### 1. Declarative & Explicit
+WireDI ignores autowiring in favor of **explicit declarations**. You define exactly what is injected. This ensures you never have a "missing dependency" error in production and your dependency graph is transparent.
+
+### 2. Smart & Safe Registration
+- **Singleton by Default**: All dependencies are registered as singletons, ensuring state consistency across your application.
+- **Idempotent Builder**: The `useBuilder` system prevents double registration. If multiple builders try to register the same token in the same container, WireDI respects the existing one. This allows you to safely compose overlapping modules without conflicts.
+
+### 3. Modular "Extend" Pattern
+Build your app like Lego. Create **partial configurations** for specific domains (e.g., Auth, Database, Logging) and **extend** them in your main application builder. This separation of concerns makes your config maintainable and testable.
+
+### 4. Real-Time Validation
+Errors are detected **in your IDE** instantly:
 
 ```typescript
 // ❌ Error detected in IDE: "Logger" is not registered
@@ -44,7 +59,7 @@ const config = defineBuilderConfig({
     injections: [
         { token: UserService }, // UserService depends on Logger
     ],
-    listeners: [],
+    // listeners is optional
 })
 ```
 
@@ -57,7 +72,7 @@ Unlike traditional DI containers, **WireDI's type checking works without decorat
 - ✅ No need for `@injectable` or `@inject` decorators
 - ✅ Framework-agnostic type safety
 
-**Learn more**: [Type Checking Without Decorators](docs/Agent/TYPE_CHECKING_WITHOUT_DECORATORS.md)
+**Learn more**: [Type Checking Without Decorators](docs/TYPE_CHECKING_WITHOUT_DECORATORS.md)
 
 ## Installation
 
@@ -195,7 +210,7 @@ const loggingPartial = definePartialConfig({
     injections: [
         { token: TOKENS.Logger, provider: ConsoleLogger },
     ],
-    listeners: [],
+    // listeners is optional - omit if you don't need event handling
 })
 
 // Main configuration
@@ -206,8 +221,9 @@ export const appConfig = defineBuilderConfig({
         { token: TOKENS.UserRepository, provider: UserRepository },
         { token: UserService }, // Class used as token
     ],
-    listeners: [],
+    // listeners is optional - only add if you need event handling
 })
+```
 ```
 
 ### 4. Use the builder
@@ -259,11 +275,13 @@ The TypeScript Language Service plugin detects configuration errors **directly i
 
 ### Detected Errors
 
-| Error Type | Description |
-|------------|-------------|
-| 🔴 Missing dependency | A service requires an unregistered token |
-| 🔴 Type mismatch | The provider doesn't implement the expected interface |
-| 🔴 Unregistered @inject token | A decorator references a missing token |
+| Error Type | Description | Error Message |
+|------------|-------------|---------------|
+| 🔴 Missing dependency | A service requires an unregistered token | `[WireDI] Missing dependency: ...` |
+| 🔴 Type mismatch | The provider doesn't implement the expected interface | `[WireDI] Type incompatible: ...` |
+| 🔴 Token collision | Token already registered in a partial | `[WireDI] This token is already registered in a partial` |
+| 🔴 Duplicate listener | Same (event, listener) pair registered twice | `[WireDI] Duplicate listener in the same configuration` |
+| 🔴 Listener collision | Listener already registered in a partial | `[WireDI] This event listener is already registered in a partial` |
 
 ### Error Example
 
@@ -274,7 +292,7 @@ const config = defineBuilderConfig({
     injections: [
         { token: TOKENS.UserRepository, provider: ConsoleLogger }, // Error here!
     ],
-    listeners: [],
+    // listeners is optional
 })
 ```
 
@@ -348,7 +366,6 @@ export const loggingPartial = definePartialConfig({
     injections: [
         { token: TOKENS.Logger, provider: ConsoleLogger },
     ],
-    listeners: [],
 })
 
 // partials/repositories.ts
@@ -357,7 +374,6 @@ export const repositoriesPartial = definePartialConfig({
         { token: TOKENS.UserRepository, provider: PostgresUserRepository },
         { token: TOKENS.ProductRepository, provider: PostgresProductRepository },
     ],
-    listeners: [],
 })
 
 // config.ts
@@ -368,7 +384,6 @@ export const appConfig = defineBuilderConfig({
         { token: UserService },
         { token: ProductService },
     ],
-    listeners: [],
 })
 ```
 
@@ -382,7 +397,6 @@ const loggingPartial = definePartialConfig({
     injections: [
         { token: TOKENS.Logger, provider: ConsoleLogger }
     ],
-    listeners: []
 })
 
 export const appConfig = defineBuilderConfig({
@@ -392,7 +406,6 @@ export const appConfig = defineBuilderConfig({
         // ❌ This will cause a TypeScript error - token already defined in partial
         { token: TOKENS.Logger, provider: FileLogger }
     ],
-    listeners: []
 })
 ```
 
@@ -407,8 +420,123 @@ export const testConfig = defineBuilderConfig({
         { token: TOKENS.Logger, provider: MockLogger }, // ✅ OK - no collision
         { token: UserService },
     ],
-    listeners: []
 })
+```
+
+### Listener Uniqueness
+
+Similar to tokens, **each (event, listener) pair must be unique** across all partials and the main configuration:
+
+```typescript
+// ❌ ERROR: Duplicate listener in the same configuration
+const config = defineBuilderConfig({
+    builderId: 'app',
+    injections: [],
+    listeners: [
+        { event: UserCreatedEvent, listener: EmailNotificationListener },
+        { event: UserCreatedEvent, listener: EmailNotificationListener }, // ❌ Duplicate!
+    ],
+})
+
+// ❌ ERROR: Listener already in partial
+const eventPartial = definePartialConfig({
+    listeners: [
+        { event: UserCreatedEvent, listener: EmailNotificationListener }
+    ],
+})
+
+const config = defineBuilderConfig({
+    builderId: 'app',
+    extends: [eventPartial],
+    injections: [],
+    listeners: [
+        { event: UserCreatedEvent, listener: EmailNotificationListener }, // ❌ Already in partial!
+    ],
+})
+
+// ✅ OK: Different listener for the same event
+const validConfig = defineBuilderConfig({
+    builderId: 'app',
+    injections: [],
+    listeners: [
+        { event: UserCreatedEvent, listener: EmailNotificationListener },
+        { event: UserCreatedEvent, listener: SmsNotificationListener }, // ✅ Different listener
+    ],
+})
+```
+
+## Event Programming
+
+> **Note**: The `listeners` property is **optional**. If your application doesn't use events, you can omit it entirely from your configuration.
+
+### Why Centralized Event Listeners?
+In traditional event-driven architectures, event listeners are often scattered across the codebase (e.g., manual `dispatcher.on(...)` calls inside constructors or initialization scripts). This makes it hard to visualize the system's reactive flow.
+
+WireDI treats event listeners as **part of your application's structural configuration**. By declaring them alongside your dependency injections, you achieve:
+- **🔍 Visibility**: See exactly **who listens to what** in a single configuration file.
+- **🧩 Decoupling**: Services don't need to know about the dispatcher; they just implement `onEvent`.
+- **🛡️ Safety**: Compile-time validation ensures your listener is compatible with the event.
+
+### Usage
+WireDI allows you to bind events to listeners declaratively:
+
+### 1. Enable Event Support
+First, configure the `EventDispatcherProvider` at startup (after the container provider):
+
+```typescript
+import {
+    useEventDispatcherProvider,
+    MutableEventDispatcherProvider,
+    getContainerProvider
+} from '@djodjonx/wiredi'
+
+useEventDispatcherProvider(new MutableEventDispatcherProvider({
+    containerProvider: getContainerProvider(),
+}))
+```
+
+### 2. Define Events and Listeners
+Events are simple classes. Listeners are services that implement an `onEvent` method.
+
+```typescript
+// events/UserCreatedEvent.ts
+export class UserCreatedEvent {
+    constructor(public readonly user: User) {}
+}
+
+// listeners/SendWelcomeEmail.ts
+export class SendWelcomeEmail {
+    constructor(private mailer: MailerService) {}
+
+    onEvent(event: UserCreatedEvent) {
+        this.mailer.send(event.user.email, 'Welcome!')
+    }
+}
+```
+
+### 3. Wire in Configuration
+Bind them in your builder configuration using the `listeners` property:
+
+```typescript
+const appConfig = defineBuilderConfig({
+    builderId: 'app',
+    injections: [
+        { token: SendWelcomeEmail }, // Register the listener itself
+        { token: MailerService },
+    ],
+    listeners: [
+        // Bind event -> listener
+        { event: UserCreatedEvent, listener: SendWelcomeEmail },
+    ],
+})
+```
+
+Now, when you dispatch an event:
+```typescript
+import { getEventDispatcherProvider } from '@djodjonx/wiredi'
+
+getEventDispatcherProvider().dispatch(new UserCreatedEvent(newUser))
+// -> SendWelcomeEmail.onEvent() is automatically called
 ```
 
 ## Creating a Custom Provider
@@ -496,7 +624,6 @@ open docs/api/index.html
 - [Quick Start Guide](./README.md#quick-start) - Get started in 4 steps
 - [Plugin Installation](./README.md#ide-plugin-for-real-time-validation) - IDE integration
 - [Provider Examples](./examples/) - Integration with tsyringe, Awilix, InversifyJS
-- [JSDoc Summary](docs/Agent/JSDOC_SUMMARY.md) - Documentation standards
 
 ## Troubleshooting
 
