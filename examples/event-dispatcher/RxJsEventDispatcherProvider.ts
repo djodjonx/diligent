@@ -144,6 +144,13 @@ export class RxJsEventDispatcherProvider implements EventDispatcherProvider {
         return listeners !== undefined && listeners.length > 0
     }
 
+    hasListener(eventToken: EventToken, listenerToken: ListenerToken): boolean {
+        const eventName = eventToken.name
+        const listeners = this.listeners.get(eventName)
+        if (!listeners) return false
+        return listeners.includes(listenerToken)
+    }
+
     clearListeners(eventToken: EventToken): void {
         const eventName = eventToken.name
 

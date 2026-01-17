@@ -153,7 +153,7 @@ const config = defineBuilderConfig({
             lifecycle: ProviderLifecycle.Singleton
         }
     ],
-    listeners: []
+    // listeners is optional
 })
 
 // ============================================================
@@ -179,7 +179,7 @@ class WrongLogger {
  *             provider: WrongLogger // ❌ Type error!
  *         }
  *     ],
- *     listeners: []
+ *     // listeners is optional
  * })
  *
  * Error: Type 'typeof WrongLogger' is not assignable to type LoggerInterface
@@ -216,7 +216,7 @@ const configWithFactory = defineBuilderConfig({
             }
         }
     ],
-    listeners: []
+    // listeners is optional
 })
 
 // ============================================================
@@ -244,7 +244,7 @@ const configWithValues = defineBuilderConfig({
             })
         }
     ],
-    listeners: []
+    // listeners is optional
 })
 
 // ============================================================

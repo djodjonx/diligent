@@ -23,7 +23,7 @@ Type checking happens at the **configuration level**, not at the decorator level
 - ✅ Interface compliance validated by TypeScript
 - ✅ Token mismatches caught at compile-time
 
-**See**: [without-decorators.ts](./without-decorators.ts) for a complete example and [Type Checking Documentation](../../docs/Agent/TYPE_CHECKING_WITHOUT_DECORATORS.md) for detailed explanation.
+**See**: [without-decorators.ts](./without-decorators.ts) for a complete example and [Type Checking Documentation](../../docs/TYPE_CHECKING_WITHOUT_DECORATORS.md) for detailed explanation.
 
 ## Quick Comparison
 
@@ -226,7 +226,7 @@ const loggingPartial = definePartialConfig({
     injections: [
         { token: TOKENS.Logger, provider: ConsoleLogger }
     ],
-    listeners: []
+    // listeners is optional
 })
 ```
 

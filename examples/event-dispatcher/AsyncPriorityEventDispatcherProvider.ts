@@ -240,6 +240,13 @@ export class AsyncPriorityEventDispatcherProvider implements EventDispatcherProv
         return listeners !== undefined && listeners.length > 0
     }
 
+    hasListener(eventToken: EventToken, listenerToken: ListenerToken): boolean {
+        const eventName = eventToken.name
+        const listeners = this.listeners.get(eventName)
+        if (!listeners) return false
+        return listeners.some(l => l.token === listenerToken)
+    }
+
     clearListeners(eventToken: EventToken): void {
         const eventName = eventToken.name
         this.listeners.delete(eventName)
